@@ -524,7 +524,7 @@ footer {
 
 /* スマホ対応調整 */
 @media (max-width: 480px) {
-    .card, .card-wide { /* .card と .card-wide 両方に効くようにします */
+    .card { /* .cardに効くようにします */
         width: 90% !important;
         
         /* ★ここが魔法の呪文です★ */
@@ -534,6 +534,21 @@ footer {
         /* 上にくっつきすぎないように余白を入れる */
         margin-top: 100px !important; 
         margin-bottom: 50px !important;
+
+        /* スマホでは高さ制限を外して、スクロールできるようにする */
+        max-height: none !important; 
+        height: auto !important;
+    }
+    
+    .card_wide {
+        width: 90% !important;
+        /* ★ここが魔法の呪文です★ */
+        /* 親が「真ん中寄せ(items-center)」でも、自分だけは「上詰め」にする */
+        align-self: flex-start !important;
+        
+        /* 上にくっつきすぎないように余白を入れる */
+        margin-top: 30px !important; 
+        margin-bottom: 30px !important;
 
         /* スマホでは高さ制限を外して、スクロールできるようにする */
         max-height: none !important; 
