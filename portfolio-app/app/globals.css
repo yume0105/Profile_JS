@@ -1,26 +1,534 @@
 @import "tailwindcss";
 
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+    /* --- 色の設定 --- */
+    /* メインの文字色：濃い紫（可読性と知的な印象） */
+    --text-main: #4a306d; 
+    /* サブの文字色：薄い紫（補足情報など） */
+    --text-sub: #706fd3;  
+    /* アクセントカラー：ピンク（リンクや強調用） */
+    --accent: #ff6b81;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+    /* --- ガラスモーフィズム（すりガラス）のデザイン設定 --- */
+    /* カードの背景色：白の半透明（55%） */
+    --glass-bg: rgba(255, 255, 255, 0.55); 
+    /* カードの枠線：白の半透明（80%）で輪郭をくっきりさせる */
+    --glass-border: rgba(255, 255, 255, 0.8);
+    /* 影の設定：少し紫がかった影で背景となじませる */
+    --glass-shadow: 0 8px 32px 0 rgba(100, 100, 130, 0.15);
+  /*--background: #ffffff;
+  --foreground: #171717;*/
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+    /* 余白をリセット */
+    margin: 0;
+    padding: 0;
+
+    /* フォント設定：日本語はNoto Sans JPを使用 */
+    font-family: 'Noto Sans JP', sans-serif;
+    color: var(--text-main);
+    
+    /* --- 背景のグラデーション設定 --- */
+    /* 左上から右下に向かってパステルカラーを配置 */
+    background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #a18cd1);
+    /* 背景サイズを大きくして、アニメーションで動かす準備 */
+    background-size: 400% 400%;
+    /* 10秒かけて背景をゆっくり動かすアニメーションを実行 */
+    animation: gradientBG 10s ease infinite;
+
+    /* --- 画面レイアウト設定 --- */
+    /* 画面の高さをブラウザの表示領域(100vh)に固定 */
+    height: 100vh;
+    /* 画面の幅を100%に */
+    width: 100vw;
+    /* 画面自体のスクロールバーを消す（カードの中だけスクロールさせるため） */
+    overflow: hidden;
+    /* スマホでのスクロールバー対策 */
+    overflow-x: hidden; 
+    
+    /* カードを画面のど真ん中に配置するためのFlexbox設定 */
+    display: flex;
+    justify-content: center; /* 左右中央揃え */
+    align-items: center;     /* 上下中央揃え */
+} 
+
+a {
+    color: var(--accent);       /* アクセントカラーを適用 */
+    text-decoration: none;      /* 下線を消す */
+    transition: 0.3s;           /* ホバー時の変化を0.3秒かけて滑らかに */
+}
+a:hover {
+    opacity: 0.7;               /* カーソルを乗せた時に少し透明にする */
+}
+
+footer {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+/* 背景を動かすアニメーションの定義 */
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }   /* 開始時 */
+    50% { background-position: 100% 50%; } /* 中間 */
+    100% { background-position: 0% 50%; }  /* 終了時（ループ） */
+}
+
+/* --- レイアウト --- */
+.card {
+    /* 背景色、カードのサイズ、角丸、影など */
+    /* --- ガラスのような見た目を作る設定 --- */
+    background: var(--glass-bg);
+    /* 背景をぼかす（すりガラス効果） */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px); /* Safari用 */
+    
+    /* 枠線と丸みの設定 */
+    border: 2px solid var(--glass-border);
+    border-radius: 24px;
+    
+    /* 内側の余白 */
+    padding: 30px 24px;
+    
+    /* サイズ設定 */
+    width: 85%;
+    max-width: 380px; /* デフォルトはスマホ・名刺サイズ */
+    text-align: center;
+    box-shadow: var(--glass-shadow);
+    position: relative;
+    
+    /* パディングを含めたサイズ計算にする */
+    box-sizing: border-box;
+
+    /* --- レイアウト設定（重要） --- */
+    /* ブロック要素として配置（ボタン崩れ防止） */
+    display: block; 
+    
+    /* 高さは中身に合わせて自動調整 */
+    height: auto;
+    height: fit-content; 
+    /* ただし、画面の90%を超えたらそれ以上伸びないようにする */
+    max-height: 90vh;
+    
+    /* --- 出現アニメーション --- */
+    animation: floatUp 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    opacity: 0; /* 最初は透明 */
+    transform: translateY(30px); /* 最初は少し下に配置 */
+}
+
+
+.card-wide {
+    max-width: 800px; /* 幅を広げる */
+    width: 90%;       /* 画面幅の90%を使う */
+    padding: 30px 30px;
+    
+    /* 中身が画面サイズを超えた時だけ、カードの中にスクロールバーを出す */
+    overflow-y: auto;
+    overflow-x: hidden; /* 横スクロールバーを非表示にする */
+    
+    /* スクロールバーのデザイン（Firefox用） */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.5) transparent;
+}
+
+/* Chrome/Safari用のスクロールバーカスタマイズ */
+.card-wide::-webkit-scrollbar {
+    width: 6px; /* 棒の太さ */
+}
+.card-wide::-webkit-scrollbar-track {
+    background: transparent; /* レールの背景 */
+    margin: 10px 0;          /* 上下の余白 */
+}
+.card-wide::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.5); /* 棒の色 */
+    border-radius: 20px;     /* 棒の丸み */
+}
+
+/* カード背景の光の反射エフェクト（装飾） */
+.card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    /* 斜めの光を入れる */
+    background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+    transform: rotate(30deg);
+    pointer-events: none; /* クリックを邪魔しないようにする */
+    z-index: -1;          /* コンテンツの後ろに配置 */
+}
+
+/* 出現アニメーションの定義 */
+@keyframes floatUp {
+    to { opacity: 1; transform: translateY(0); } /* 透明度1、元の位置へ */
+}
+
+.nav-header {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start; /* 左寄せ */
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* 戻るボタンのデザイン */
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-main);
+    border: 1px solid white;
+}
+.back-btn:hover {
+    background: white; /* ホバー時に白くする */
+    color: var(--accent);
+}
+
+/* ページタイトル */
+.page-title {
+    font-family: 'Cinzel', serif; /* おしゃれなフォント */
+    font-size: 1.5rem;
+    margin: 0 0 25px 0;
+    color: var(--text-main);
+    border-bottom: 1px dashed rgba(255,255,255,0.5); /* 下に点線 */
+    padding-bottom: 10px;
+}
+
+/* --- アバターセクション --- */
+.avatar-container {
+    /* 位置調整など */
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 20px;
+}
+
+.orbit {
+  /* 装飾のアニメーションや円形デザインなど */
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 1px dashed rgba(255, 255, 255, 0.8);
+    animation: spin 10s linear infinite;
+    z-index: 1;
+}
+
+.avatar {
+  /* 丸く切り抜く(border-radius: 50%)など */
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ffffff;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.name-title {
+  /* フォントサイズ、太さなど */
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: 0.05em;
+    color: var(--text-main);
+}
+
+.kana-name {
+  /* フォントサイズ、色など */
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.75rem;
+    color: var(--text-main);
+    margin-top: 2px;
+    margin-bottom: 15px;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+}
+
+.role {
+  /* 肩書きのデザイン */
+    color: var(--accent);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-top: 8px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.bio {
+  /* 自己紹介文の行間や色など */
+    color: #555;
+    font-size: 0.8rem;
+    line-height: 1.7;
+    margin-bottom: 15px;
+    font-weight: 400;
+    text-align: center;
+    padding: 0 10px;
+}
+
+.email {
+  /* メールの文字スタイル */
+    color: #555;
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.email-link {
+    /* リンクの色、下線の有無など */
+    color: var(--accent);
+    font-size: 0.8rem;
+}
+
+.email-link:hover {
+    text-decoration: underline;
+}
+
+/* --- 下部エリア（グリッド・ボタン） --- */
+.bottom-grid {
+  /* display: grid; や flex; などで配置調整 */
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 12px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.sns-area {
+  /* アイコンボタンの並び（flexなど） */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 8px;
+}
+
+.sns-btn {
+  /* SNSアイコンのサイズ、余白、ホバー時の動き */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 1 / 1;
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid #ffffff;
+    border-radius: 12px;
+    color: var(--text-main);
+    font-size: 1.2rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.sns-btn:hover {
+    background: #ffffff;
+    color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 154, 158, 0.4);
+}
+
+.link-area {
+  /* リンクボタンの並び */
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.link-btn {
+  /* ボタンの形状、背景色、ボーダーなど */
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 16px;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid #ffffff;
+    border-radius: 12px;
+    color: var(--text-main);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.link-btn:hover {
+    background: #ffffff;
+    transform: translateX(2px);
+    box-shadow: 0 5px 15px rgba(161, 140, 209, 0.3);
+}
+
+.link-btn.highlight {
+  /* 特定の強調スタイル、またはhover時の変化など */
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+}
+
+.link-btn svg {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 0.8rem;
+    opacity: 0.6;
+    transition: 0.3s;
+    color: var(--text-sub);
+}
+
+.link-btn:hover svg {
+    opacity: 1;
+    color: var(--accent);
+    transform: translate(1px, -1px);
+}
+
+/* --- アニメーション用 --- */
+.fade-up {
+    opacity: 0;
+    animation: slideIn 0.6s ease forwards;
+}
+.d-1 { animation-delay: 0.2s; }
+.d-2 { animation-delay: 0.4s; }
+.d-3 { animation-delay: 0.6s; }
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Projectsページ：リストスタイル --- */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    text-align: left;
+}
+
+.project-item {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 16px;
+    border: 1px solid #fff;
+    overflow: hidden;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+}
+
+.project-item:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 10px 20px rgba(112, 111, 211, 0.15);
+}
+
+.project-thumb {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+
+.project-info {
+    padding: 15px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.project-tags {
+    margin-bottom: 8px;
+}
+.tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: var(--text-main);
+    color: #fff;
+    margin-right: 4px;
+    margin-bottom: 4px;
+}
+.tag.research { background: #706fd3; } /* 紫 */
+.tag.dev { background: #ff6b81; }      /* ピンク */
+.tag.status-in-progress { background: #f7b32b; } /* オレンジ */
+.tag.status-finished { background: #3bb273; }    /* グリーン */
+
+.project-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 5px 0;
+    color: var(--text-main);
+}
+.project-desc {
+    font-size: 0.85rem;
+    color: #666;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.content-section {
+    text-align: left;
+    margin-bottom: 30px;
+}
+
+.content-section h2 {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: var(--text-main);
+    border-left: 4px solid var(--accent);
+    padding-left: 10px;
+    margin-bottom: 15px;
+}
+
+.content-section h3 {
+    font-size: 1rem;
+    color: var(--text-sub);
+    margin: 15px 0 5px 0;
+}
+
+.content-section p, .content-section li {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: #444;
+}
+
+.hero-image {
+    width: 100%;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* CV用リスト */
+.cv-list {
+    list-style: none;
+    padding: 0;
+}
+.cv-list li {
+    margin-bottom: 12px;
+    padding-left: 1em;
+    text-indent: -1em;
+}
+.cv-date {
+    font-weight: 600;
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+/* スマホ対応調整 */
+@media (max-width: 480px) {
+    .card-wide {
+        width: 90%;
+        padding: 30px 20px;
+    }
+    .projects-grid {
+        grid-template-columns: 1fr;
+    }
 }
