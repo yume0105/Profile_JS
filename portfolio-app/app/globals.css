@@ -540,7 +540,7 @@ footer {
         height: auto !important;
     }
     
-    .card_wide {
+    .card-wide {
         width: 90% !important;
         /* ★ここが魔法の呪文です★ */
         /* 親が「真ん中寄せ(items-center)」でも、自分だけは「上詰め」にする */
