@@ -47,10 +47,10 @@ export const publications = [
 // 受賞歴データ
 export const awards = [
   {
-    year: "2023",
+    year: "2025",
     title: (
       <>
-        <strong>Best Presentation Award</strong>, XXX Workshop
+        <strong>関西テック・クリエイター・チャレンジ　AI・IoT部門　採択</strong>,Chronos 記憶を補助・拡張し、提示する際ばねティック・アバター
       </>
     )
   },
@@ -58,7 +58,7 @@ export const awards = [
     year: "2022",
     title: (
       <>
-        <strong>Finalist</strong>, Kansai Tech Hackathon (Chronos)
+        <strong>第4回全国電子工学系学校ゲーム制作コンペティション　準グランプリ</strong>, Unityで脳トレゲーム制作を行いました。
       </>
     )
   }
@@ -66,7 +66,7 @@ export const awards = [
 
 // スキルデータ
 export const skills = [
-  { category: "Languages", items: "Python, JavaScript (React, Node.js), C++, Dart (Flutter)" },
-  { category: "Tools", items: "Arduino, Firebase, Figma, Unity" },
-  { category: "Hardware", items: "M5Stack, Raspberry Pi, 3D Printing" }
+  { category: "Languages", items: "Python, JavaScript (React, Node.js), C++" },
+  { category: "Tools", items: "Arduino, Figma, Unity" },
+  { category: "Hardware", items: "3D Printing" }
 ];
