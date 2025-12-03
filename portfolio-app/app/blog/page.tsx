@@ -4,25 +4,18 @@ import { blogPosts, archives, categories } from '../data/blog'; // データを�
 
 export default function BlogPage() {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      {/* 幅広カードクラスを使用 */}
-      <main className="card card-wide bg-white shadow-xl rounded-2xl overflow-hidden w-full max-w-6xl">
+    <main className="card card-wide">
         
-        {/* ヘッダー：戻るボタン */}
-        <div className="nav-header fade-up p-6 border-b border-gray-100">
-          <Link href="/" className="back-btn flex items-center gap-2 text-gray-500 hover:text-gray-800 transition w-fit">
+      {/* ヘッダー：戻るボタン */}
+      <div className="nav-header fade-up">
+          <Link href="/" className="back-btn">
             <FaChevronLeft /> Home
           </Link>
-        </div>
-
-        <div className="p-6 md:p-12">
-          <h1 className="page-title fade-up d-1 text-3xl font-bold mb-10 text-center border-b pb-4">
-            Blog & News
-          </h1>
-
-          {/* 2カラムレイアウトエリア */}
-          <div className="flex flex-col lg:flex-row gap-12 fade-up d-2">
-            
+      </div>
+      
+      <h1 className="page-title fade-up d-1">Blog & News</h1>
+      {/* 2カラムレイアウトエリア */}
+      <div className="flex flex-col lg:flex-row gap-12 fade-up d-2">
             {/* --- メインカラム（記事一覧） --- */}
             <div className="w-full lg:w-3/4 space-y-8">
               {blogPosts.map((post) => (
@@ -107,13 +100,11 @@ export default function BlogPage() {
 
             </aside>
 
-          </div>
         </div>
 
-        <footer className="fade-up d-3 text-center py-6 text-gray-400 text-sm border-t border-gray-100">
+        <footer className="fade-up d-3">
             © 2025 Yume Masuya
         </footer>
-      </main>
-    </div>
+    </main>
   );
 }
