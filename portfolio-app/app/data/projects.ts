@@ -14,13 +14,8 @@ export const projects = [
       { text: "In Progress", type: "status-in-progress" }
     ],
     content: `
-      <p>ここにはChronosプロジェクトの詳細な説明が入ります。</p>
-      <p>背景、目的、実装手法、評価実験の結果などを詳しく書くことができます。</p>
-      <h3>主な機能</h3>
-      <ul>
-        <li>ライフログの自動記録</li>
-        <li>文脈に応じた情報の自動提示</li>
-      </ul>
+      <p>記事の準備中です。</p>
+      <p>随時更新していきます。</p>
     `
   },
   {
