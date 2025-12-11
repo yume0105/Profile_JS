@@ -50,7 +50,12 @@ export const awards = [
     year: "2025",
     title: (
       <>
-        <strong>関西テック・クリエイター・チャレンジ　AI・IoT部門　採択</strong>,Chronos 記憶を補助・拡張し、提示する際ばねティック・アバター
+        <strong>関西テック・クリエイター・チャレンジ　AI・IoT部門　採択</strong>
+      </>
+    ),
+    content: (
+      <>
+        Chronos 記憶を補助・拡張し、提示するサイバネティック・アバター
       </>
     )
   },
@@ -58,7 +63,12 @@ export const awards = [
     year: "2022",
     title: (
       <>
-        <strong>第4回全国電子工学系学校ゲーム制作コンペティション　準グランプリ</strong>, Unityで脳トレゲーム制作を行いました。
+        <strong>第4回全国電子工学系学校ゲーム制作コンペティション　準グランプリ</strong>
+      </>
+    ),
+    content: (
+      <>
+      チームでの脳トレゲーム制作
       </>
     )
   }

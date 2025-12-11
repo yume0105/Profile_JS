@@ -27,8 +27,7 @@ export default function Home() {
       {/* 自己紹介文 */}
       <section className="fade-up d-2">
         <p className="bio">
-          奈良先端科学技術大学院大学<br />
-          サイバネティクス・リアリティ工学研究室(CARELab)所属
+          奈良先端科学技術大学院大学(CARELab)所属
         </p>
       </section>
       {/*メールアドレス*/}
