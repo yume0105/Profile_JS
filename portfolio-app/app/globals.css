@@ -21,6 +21,15 @@
   --foreground: #171717;*/
 }
 
+/* スマホでのページスクロールを完全に無効化 */
+html {
+    height: 100%;
+    overflow: hidden;
+    overflow-x: hidden;
+    position: fixed;
+    width: 100%;
+}
+
 body {
     /* 余白をリセット */
     margin: 0;
@@ -41,8 +50,9 @@ body {
     /* --- 画面レイアウト設定 --- */
     /* 画面の高さをブラウザの表示領域(100vh)に固定 */
     height: 100vh;
+    height: 100%;
     /* 画面の幅を100%に */
-    width: 100vw;
+    width: 100%;
     /* 画面自体のスクロールバーを消す（カードの中だけスクロールさせるため） */
     overflow: hidden;
     /* スマホでのスクロールバー対策 */
