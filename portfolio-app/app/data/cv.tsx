@@ -80,6 +80,6 @@ export const awards = [
 // スキルデータ
 export const skills = [
   { category: "Languages", items: "Japanese (Native), English (Beginner Level)" },
-  { category: "Programming Languages", items: "Python, JavaScript (React, Node.js), C++, C#, C, HTML, CSS" },
+  { category: "Programming Languages", items: "Python, JavaScript (React Node.js), C++, C#, C, HTML, CSS" },
   { category: "Tools", items: "Arduino, Figma, Unity, Miro, AWS" }
 ];
