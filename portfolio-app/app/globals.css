@@ -23,20 +23,15 @@ body {
   background-size: 400% 400%;
   animation: gradientBG 10s ease infinite;
 
-  /* 最低の高さを確保しつつ、中身が増えたら伸びるように */
   min-height: 100vh;
   width: 100%;
-  
-  /* 全体の横スクロールを防止 */
   overflow-x: hidden; 
 
   display: flex;
   flex-direction: column;
-  /* コンテンツが少ない時は中央、多い時は上詰め（スクロール可能にするため） */
   justify-content: center; 
   align-items: center;
   
-  /* 上下の余白 */
   padding: 40px 0; 
   box-sizing: border-box;
 }
@@ -52,7 +47,6 @@ footer {
   font-size: 0.8rem;
   color: #888;
   margin-top: 20px;
-  /* フッターがカードにくっつきすぎないように確保 */
   padding-bottom: 20px; 
 }
 
@@ -81,10 +75,6 @@ footer {
   
   height: auto;
   margin: auto;
-
-  /* ★★★修正：重要！★★★ */
-  /* ここに overflow: hidden を入れないと、背景のグラデーションが */
-  /* カードからはみ出して、横スクロールや謎の余白の原因になります */
   overflow: hidden; 
 
   animation: floatUp 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
@@ -97,22 +87,19 @@ footer {
   width: 90%;
   padding: 30px;
   margin: auto;
-  /* こちらも同様にはみ出し防止 */
   overflow: hidden; 
-  position: relative; /* 背景グラデーションのために必要 */
+  position: relative;
 }
 
 /* 背景装飾 */
 .card::before, .card-wide::before {
   content: '';
   position: absolute;
-  /* 中心から配置 */
   top: 50%;
   left: 50%;
-  /* 中心を基準に移動させる */
   transform: translate(-50%, -50%) rotate(30deg);
   
-  width: 200%; /* カードよりかなり大きい */
+  width: 200%;
   height: 200%;
   background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
   pointer-events: none;
@@ -142,32 +129,30 @@ footer {
 .email-link { color: var(--accent); font-size: 0.8rem; }
 .email-link:hover { text-decoration: underline; }
 
-/* ★★★修正：ボタン配置エリアのバランス調整★★★ */
+/* PC・タブレット用レイアウト */
 .bottom-grid { 
-  display: flex; /* GridからFlexに変更して幅制御しやすくする */
+  display: flex; 
   gap: 12px; 
   width: 100%; 
   margin-top: 20px; 
-  align-items: stretch; /* 高さを揃える */
+  align-items: stretch; 
 }
 
-/* SNSエリア：幅を固定してボタンが巨大化するのを防ぐ */
 .sns-area { 
-  flex: 0 0 110px; /* 幅を110pxに固定 */
+  flex: 0 0 110px; 
   display: grid; 
   grid-template-columns: 1fr 1fr; 
   grid-template-rows: 1fr 1fr; 
   gap: 8px; 
 }
 
-/* SNSボタン：高さも適度に制限 */
 .sns-btn { 
   display: flex; 
   justify-content: center; 
   align-items: center; 
   width: 100%;
-  height: 100%; /* 親グリッドに合わせて伸縮 */
-  aspect-ratio: 1 / 1; /* 正方形を維持 */
+  height: 100%; 
+  aspect-ratio: 1 / 1; 
   background: rgba(255, 255, 255, 0.4); 
   border: 1px solid #ffffff; 
   border-radius: 12px; 
@@ -179,22 +164,21 @@ footer {
 }
 .sns-btn:hover { background: #ffffff; color: var(--accent); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 154, 158, 0.4); }
 
-/* リンクエリア：残りの幅をすべて使う */
 .link-area { 
-  flex: 1; /* 残りのスペースを埋める */
+  flex: 1; 
   display: flex; 
   flex-direction: column; 
   gap: 8px; 
 }
 
 .link-btn { 
-  flex: 1; /* 縦方向いっぱいに広がる */
+  flex: 1; 
   display: flex; 
   flex-direction: column; 
   justify-content: center; 
   align-items: flex-start; 
   padding: 0 16px; 
-  min-height: 44px; /* 最低限の高さを保証 */
+  min-height: 44px; 
   background: rgba(255, 255, 255, 0.6); 
   border: 1px solid #ffffff; 
   border-radius: 12px; 
@@ -211,7 +195,7 @@ footer {
 .link-btn svg { position: absolute; top: 50%; right: 12px; transform: translateY(-50%); font-size: 0.8rem; opacity: 0.6; transition: 0.3s; color: var(--text-sub); }
 .link-btn:hover svg { opacity: 1; color: var(--accent); transform: translate(1px, -50%); }
 
-/* プロジェクト・アニメーション系（そのまま） */
+/* プロジェクト・アニメーション系 */
 .fade-up { opacity: 0; animation: slideIn 0.6s ease forwards; }
 .d-1 { animation-delay: 0.2s; } .d-2 { animation-delay: 0.4s; } .d-3 { animation-delay: 0.6s; }
 @keyframes slideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
@@ -235,23 +219,28 @@ footer {
 .cv-list li { margin-bottom: 12px; padding-left: 1em; text-indent: -1em; }
 .cv-date { font-weight: 600; color: var(--accent); margin-right: 8px; }
 
+/* ★★★修正ポイント：スマホ対応★★★ */
 @media (max-width: 480px) {
     .card, .card-wide {
         width: 90%;
         margin: 20px auto;
     }
     
-    /* スマホの場合は縦積みにする */
+    /* コンテナを縦積みに */
     .bottom-grid {
         flex-direction: column; 
     }
     
-    /* スマホで縦積みになってもSNSボタンがデカくなりすぎないようにする */
+    /* SNSエリア：スマホでは横一列（4列）にする */
     .sns-area {
         flex: auto;
         width: 100%;
-        max-width: 200px; /* ここで制限 */
-        margin: 0 auto; /* 中央寄せ */
+        max-width: 100%; /* 幅制限を解除して全幅使う */
+        margin: 0 0 12px 0; /* 下に余白 */
+        
+        /* 4列に設定 */
+        grid-template-columns: repeat(4, 1fr); 
+        grid-template-rows: 1fr;
     }
 
     .projects-grid {
