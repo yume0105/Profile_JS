@@ -1,3 +1,4 @@
+import { link } from 'fs';
 import React from 'react';
 
 // 学歴データ
@@ -48,6 +49,7 @@ export const publications = [
 export const awards = [
   {
     year: "2025",
+    link: "/projects/chronos",
     title: (
       <>
         <strong>関西テック・クリエイター・チャレンジ　AI・IoT部門　採択</strong>
@@ -61,6 +63,7 @@ export const awards = [
   },
   {
     year: "2022",
+    link: "/projects/oturi",
     title: (
       <>
         <strong>第4回全国電子工学系学校ゲーム制作コンペティション　準グランプリ</strong>
@@ -76,7 +79,7 @@ export const awards = [
 
 // スキルデータ
 export const skills = [
-  { category: "Languages", items: "Python, JavaScript (React, Node.js), C++" },
-  { category: "Tools", items: "Arduino, Figma, Unity" },
-  { category: "Hardware", items: "3D Printing" }
+  { category: "Languages", items: "Japanese (Native), English (Beginner Level)" },
+  { category: "Programming Languages", items: "Python, JavaScript (React, Node.js), C++, C#, C, HTML, CSS" },
+  { category: "Tools", items: "Arduino, Figma, Unity, Miro, AWS" }
 ];
