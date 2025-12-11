@@ -9,12 +9,8 @@
   --glass-shadow: 0 8px 32px 0 rgba(100, 100, 130, 0.15);
 }
 
-/* --- 修正ポイント1：htmlのガチガチ拘束を解除 --- */
 html {
-  /* position: fixed; は削除 */
-  /* overflow: hidden; は削除 */
   width: 100%;
-  /* 横スクロールだけ防ぐならbodyでやるのが安全 */
 }
 
 body {
@@ -27,21 +23,21 @@ body {
   background-size: 400% 400%;
   animation: gradientBG 10s ease infinite;
 
-  /* --- 修正ポイント2：高さ固定をやめて「最低の高さ」にする --- */
-  min-height: 100vh; /* 中身が少ない時は画面いっぱい、増えたら伸びる */
+  /* 最低の高さを確保しつつ、中身が増えたら伸びるように */
+  min-height: 100vh;
   width: 100%;
   
-  /* 横スクロール対策 */
+  /* 全体の横スクロールを防止 */
   overflow-x: hidden; 
 
-  /* 上下左右中央配置の設定 */
   display: flex;
-  flex-direction: column; /* 縦並びを基本にする */
-  justify-content: center;
+  flex-direction: column;
+  /* コンテンツが少ない時は中央、多い時は上詰め（スクロール可能にするため） */
+  justify-content: center; 
   align-items: center;
   
-  /* コンテンツが画面より大きくなった時のための余白 */
-  padding: 20px 0; 
+  /* 上下の余白 */
+  padding: 40px 0; 
   box-sizing: border-box;
 }
 
@@ -55,7 +51,9 @@ a:hover { opacity: 0.7; }
 footer {
   font-size: 0.8rem;
   color: #888;
-  margin-top: 20px; /* カードとの距離 */
+  margin-top: 20px;
+  /* フッターがカードにくっつきすぎないように確保 */
+  padding-bottom: 20px; 
 }
 
 @keyframes gradientBG {
@@ -73,44 +71,50 @@ footer {
   border-radius: 24px;
   padding: 30px 24px;
   
-  /* サイズ設定 */
-  width: 90%; /* 基本は90%（スマホ意識） */
-  max-width: 380px; /* PCではこの幅で止まる */
+  width: 90%;
+  max-width: 380px;
   
   text-align: center;
   box-shadow: var(--glass-shadow);
   position: relative;
   box-sizing: border-box;
   
-  /* --- 修正ポイント3：高さ制限の緩和 --- */
-  height: auto; 
-  /* max-height: 90vh; ← これは削除（中身が溢れる原因になるため） */
+  height: auto;
+  margin: auto;
+
+  /* ★★★修正：重要！★★★ */
+  /* ここに overflow: hidden を入れないと、背景のグラデーションが */
+  /* カードからはみ出して、横スクロールや謎の余白の原因になります */
+  overflow: hidden; 
 
   animation: floatUp 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   opacity: 0;
   transform: translateY(30px);
-  
-  /* Flexboxアイテムとしての設定 */
-  margin: auto; /* これがあると、flexコンテナ内で上下左右の余白が自動調整されて中央に来る */
 }
 
 .card-wide {
   max-width: 800px;
   width: 90%;
   padding: 30px;
-  margin: auto; /* 中央配置 */
+  margin: auto;
+  /* こちらも同様にはみ出し防止 */
+  overflow: hidden; 
+  position: relative; /* 背景グラデーションのために必要 */
 }
 
-/* その他の装飾系（変更なしでOK） */
-.card::before {
+/* 背景装飾 */
+.card::before, .card-wide::before {
   content: '';
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
+  /* 中心から配置 */
+  top: 50%;
+  left: 50%;
+  /* 中心を基準に移動させる */
+  transform: translate(-50%, -50%) rotate(30deg);
+  
+  width: 200%; /* カードよりかなり大きい */
   height: 200%;
   background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
-  transform: rotate(30deg);
   pointer-events: none;
   z-index: -1;
 }
@@ -119,16 +123,17 @@ footer {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* コンポーネント類（nav-header以下）はそのまま利用可能なので省略しませんが、
-   変更の必要はありません。そのまま使ってください。 */
-
+/* --- コンポーネント --- */
 .nav-header { width: 100%; display: flex; justify-content: flex-start; align-items: center; margin-bottom: 20px; }
 .back-btn { display: inline-flex; align-items: center; padding: 8px 16px; background: rgba(255, 255, 255, 0.4); border-radius: 20px; font-size: 0.8rem; font-weight: 600; color: var(--text-main); border: 1px solid white; }
 .back-btn:hover { background: white; color: var(--accent); }
 .page-title { font-family: 'Cinzel', serif; font-size: 1.5rem; margin: 0 0 25px 0; color: var(--text-main); border-bottom: 1px dashed rgba(255,255,255,0.5); padding-bottom: 10px; }
+
 .avatar-container { position: relative; width: 100px; height: 100px; margin: 0 auto 20px; }
 .orbit { position: absolute; top: -10px; left: -10px; width: 120px; height: 120px; border-radius: 50%; border: 1px dashed rgba(255, 255, 255, 0.8); animation: spin 10s linear infinite; z-index: 1; }
 .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid #ffffff; position: relative; z-index: 2; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
 .name-title { font-family: 'Cinzel', serif; font-size: 1.8rem; font-weight: 600; margin: 0; letter-spacing: 0.05em; color: var(--text-main); }
 .kana-name { font-family: 'Noto Sans JP', sans-serif; font-size: 0.75rem; color: var(--text-main); margin-top: 2px; margin-bottom: 15px; letter-spacing: 0.1em; font-weight: 400; }
 .role { color: var(--accent); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.2em; margin-top: 8px; margin-bottom: 20px; font-weight: 600; }
@@ -136,21 +141,81 @@ footer {
 .email { color: #555; font-size: 0.8rem; text-align: center; }
 .email-link { color: var(--accent); font-size: 0.8rem; }
 .email-link:hover { text-decoration: underline; }
-.bottom-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 12px; width: 100%; margin-top: 20px; }
-.sns-area { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 8px; }
-.sns-btn { display: flex; justify-content: center; align-items: center; aspect-ratio: 1 / 1; background: rgba(255, 255, 255, 0.4); border: 1px solid #ffffff; border-radius: 12px; color: var(--text-main); font-size: 1.2rem; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+
+/* ★★★修正：ボタン配置エリアのバランス調整★★★ */
+.bottom-grid { 
+  display: flex; /* GridからFlexに変更して幅制御しやすくする */
+  gap: 12px; 
+  width: 100%; 
+  margin-top: 20px; 
+  align-items: stretch; /* 高さを揃える */
+}
+
+/* SNSエリア：幅を固定してボタンが巨大化するのを防ぐ */
+.sns-area { 
+  flex: 0 0 110px; /* 幅を110pxに固定 */
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  grid-template-rows: 1fr 1fr; 
+  gap: 8px; 
+}
+
+/* SNSボタン：高さも適度に制限 */
+.sns-btn { 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  width: 100%;
+  height: 100%; /* 親グリッドに合わせて伸縮 */
+  aspect-ratio: 1 / 1; /* 正方形を維持 */
+  background: rgba(255, 255, 255, 0.4); 
+  border: 1px solid #ffffff; 
+  border-radius: 12px; 
+  color: var(--text-main); 
+  font-size: 1.2rem; 
+  text-decoration: none; 
+  transition: all 0.3s ease; 
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+}
 .sns-btn:hover { background: #ffffff; color: var(--accent); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 154, 158, 0.4); }
-.link-area { display: flex; flex-direction: column; gap: 8px; }
-.link-btn { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 0 16px; background: rgba(255, 255, 255, 0.6); border: 1px solid #ffffff; border-radius: 12px; color: var(--text-main); text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.3s ease; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+
+/* リンクエリア：残りの幅をすべて使う */
+.link-area { 
+  flex: 1; /* 残りのスペースを埋める */
+  display: flex; 
+  flex-direction: column; 
+  gap: 8px; 
+}
+
+.link-btn { 
+  flex: 1; /* 縦方向いっぱいに広がる */
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: flex-start; 
+  padding: 0 16px; 
+  min-height: 44px; /* 最低限の高さを保証 */
+  background: rgba(255, 255, 255, 0.6); 
+  border: 1px solid #ffffff; 
+  border-radius: 12px; 
+  color: var(--text-main); 
+  text-decoration: none; 
+  font-size: 0.9rem; 
+  font-weight: 600; 
+  transition: all 0.3s ease; 
+  position: relative; 
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+}
 .link-btn:hover { background: #ffffff; transform: translateX(2px); box-shadow: 0 5px 15px rgba(161, 140, 209, 0.3); }
 .link-btn.highlight { background: rgba(255, 255, 255, 0.8); border: 1px solid var(--accent); color: var(--accent); }
-.link-btn svg { position: absolute; top: 12px; right: 12px; font-size: 0.8rem; opacity: 0.6; transition: 0.3s; color: var(--text-sub); }
-.link-btn:hover svg { opacity: 1; color: var(--accent); transform: translate(1px, -1px); }
+.link-btn svg { position: absolute; top: 50%; right: 12px; transform: translateY(-50%); font-size: 0.8rem; opacity: 0.6; transition: 0.3s; color: var(--text-sub); }
+.link-btn:hover svg { opacity: 1; color: var(--accent); transform: translate(1px, -50%); }
+
+/* プロジェクト・アニメーション系（そのまま） */
 .fade-up { opacity: 0; animation: slideIn 0.6s ease forwards; }
 .d-1 { animation-delay: 0.2s; } .d-2 { animation-delay: 0.4s; } .d-3 { animation-delay: 0.6s; }
 @keyframes slideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-/* Projects & CV styles (変更なし) */
 .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; text-align: left; }
 .project-item { background: rgba(255, 255, 255, 0.5); border-radius: 16px; border: 1px solid #fff; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; }
 .project-item:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.8); box-shadow: 0 10px 20px rgba(112, 111, 211, 0.15); }
@@ -170,24 +235,25 @@ footer {
 .cv-list li { margin-bottom: 12px; padding-left: 1em; text-indent: -1em; }
 .cv-date { font-weight: 600; color: var(--accent); margin-right: 8px; }
 
-/* --- 修正ポイント4：スマホ対応（シンプルにする） --- */
 @media (max-width: 480px) {
-    /* 魔法の呪文（!important）はもう不要です。
-       bodyがmin-heightで伸び縮みするようになったので、
-       自然に任せるだけでレイアウト崩れは起きにくくなります。
-    */
-
-    /* スマホで横幅いっぱいにしたくない場合 */
     .card, .card-wide {
         width: 90%;
-        margin: 40px auto; /* 上下に余裕を持たせる */
+        margin: 20px auto;
     }
     
+    /* スマホの場合は縦積みにする */
     .bottom-grid {
-        /* スマホなら縦に積んだほうが押しやすいかも */
-        grid-template-columns: 1fr; 
+        flex-direction: column; 
     }
     
+    /* スマホで縦積みになってもSNSボタンがデカくなりすぎないようにする */
+    .sns-area {
+        flex: auto;
+        width: 100%;
+        max-width: 200px; /* ここで制限 */
+        margin: 0 auto; /* 中央寄せ */
+    }
+
     .projects-grid {
         grid-template-columns: 1fr;
     }
